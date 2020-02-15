@@ -1,7 +1,7 @@
 <div class="item-holder">
-    <div class="row">
+    <div class="row head">
         <strong>{{loan.title}}</strong>
-        <span>Invested</span>
+        <span *ngIf="isInvested">Invested</span>
     </div>
     <div class="row">
         <ul class="info">
@@ -11,12 +11,13 @@
             </li>
             <li>
                 <span>Amount:</span>
-                <span>{{loan.amount}}</span>
+                <span>&pound;{{loan.amount}}</span>
             </li>
             <li>
                 <span>Available:</span>
-                <span>{{loan.available}}</span>
+                <span>&pound;{{loan.available}}</span>
             </li>
         </ul>
+        <button mat-flat-button color="primary" (click)="openDetails()">Invest</button>
     </div>
 </div>

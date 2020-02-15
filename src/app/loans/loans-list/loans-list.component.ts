@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 
 import { ILoan } from './../../core/models/loan.model.js';
-import { Store, select } from '@ngrx/store';
 import { IState } from './../../state';
-import { LoadLoans } from './../../state/loans.actions';
+import { selectLoans, selectTotalAvailableAmount } from './../../state/loans.selectors';
+import { LoansService } from '../loans.service.js';
 
 @Component({
   selector: 'loans-list',
@@ -14,14 +15,18 @@ import { LoadLoans } from './../../state/loans.actions';
 })
 export class LoansListComponent implements OnInit {
   public loansList$: Observable<ILoan[]>;
+  public totalAvailableAmount$: Observable<string>;
   public constructor(
-    private store: Store<IState>
+    private store: Store<IState>,
+    private loansService: LoansService
   ) { }
 
   public ngOnInit(): void {
-    this.store.dispatch(new LoadLoans());
-    this.loansList$ = this.store.pipe(
-      select('loans', 'data')
-    );
+    this.loansService.loadLoans();
+    this.loansList$ = this.store.pipe(select(selectLoans));
+    this.totalAvailableAmount$ = this.store.pipe(select(selectTotalAvailableAmount));
+  }
+  public isInvested$(id: string): Observable<boolean> {
+    return this.loansService.isLoanInvested$(id);
   }
 }

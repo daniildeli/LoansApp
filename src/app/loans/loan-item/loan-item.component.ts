@@ -1,16 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
 import { ILoan } from './../../core/models/loan.model';
+import { LoanDetailComponent } from '../loan-detail/loan-detail.component';
 
 @Component({
   selector: 'loan-item',
   templateUrl: './loan-item.component.html',
   styleUrls: ['./loan-item.component.scss']
 })
-export class LoanItemComponent implements OnInit {
-  @Input() public loan: ILoan;
-  public constructor() { }
+export class LoanItemComponent {
+  @Input() public readonly loan: ILoan;
+  @Input() public readonly isInvested: boolean;
+  public constructor(public dialog: MatDialog) { }
 
-  public ngOnInit(): void {
+  public openDetails(): void {
+    this.dialog.open(LoanDetailComponent, {
+      width: '500px',
+      data: this.loan,
+      panelClass: 'custom-dialog'
+    });
   }
 
 }

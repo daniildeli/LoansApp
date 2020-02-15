@@ -1,19 +1,62 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { AbstractControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
-import { ILoan, ILoansResponse } from '../core/models/loan.model';
+import * as moment from 'moment';
+
+import { IState } from '../state';
+import { selectInvestedLoansIds } from '../state/loans.selectors';
+import { LoadLoans, InvestToLoan } from '../state/loans.actions';
+
+export function numberValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  return !!control.value && isNaN(+(`${control.value}`.trim().replace(',', '.'))) ? { notANumber: true } : null;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoansService {
-  public constructor(private httpClient: HttpClient) { }
-  public getLoans$(): Observable<ILoan[]> {
-    return this.httpClient.get<ILoansResponse>('assets/current-loans.json').pipe(
-      map((data: ILoansResponse) => data.loans)
+  private readonly investedLoansIds$: Observable<string[]> = this.store.pipe(select(selectInvestedLoansIds));
+  public constructor(
+    private snackBar: MatSnackBar,
+    private store: Store<IState>
+  ) { }
+  public loadLoans(): void {
+    this.store.dispatch(new LoadLoans());
+  }
+  public showTooltip(message: string): void {
+    this.snackBar.open(message, '', {
+      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: 'snackbar-holder',
+    });
+  }
+  public getDatesDiff(start: Date, end: Date): string {
+    const startDate: moment.Moment = moment(start);
+    const endDate: moment.Moment = moment(end);
+    const yearDiff: number = endDate.diff(startDate, 'year');
+    const monthDiff: number = endDate.diff(startDate, 'month');
+    const dayDiff: number = endDate.diff(startDate, 'days');
+    const hoursDiff: number = endDate.diff(startDate, 'hour');
+    const minuteDiff: number = endDate.diff(startDate, 'minute');
+
+    return `${!!yearDiff ? `${yearDiff} year(s)` : ''}
+      ${!!monthDiff ? `${monthDiff} month(s)` : ''}
+      ${!!dayDiff ? `${dayDiff} day(s)` : ''}
+      ${!!hoursDiff ? `${hoursDiff} hour(s)` : ''}
+      ${!!minuteDiff ? `${minuteDiff} minute(s)` : ''}`.trim();
+  }
+  public isLoanInvested$(loanId: string): Observable<boolean> {
+    return this.investedLoansIds$.pipe(
+      map(idsArr => !!idsArr && idsArr.includes(loanId))
     );
+  }
+  public onInvest(loanId: string, investmentAmount: number): void {
+    this.store.dispatch(new InvestToLoan({loanId, investmentAmount }));
   }
 }

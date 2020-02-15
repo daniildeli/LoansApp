@@ -4,7 +4,8 @@ import { ILoan } from '../core/models/loan.model';
 export enum LoansActionsTypes {
     LoadLoans = '[Loans] Load Loans',
     LoadLoansSuccess = '[Loans] Load Loans Success',
-    LoadLoansError = '[Loans] Load Loans Error'
+    LoadLoansError = '[Loans] Load Loans Error',
+    InvestToLoan = '[Loans] Invest To Loan'
 }
 
 export class LoadLoans implements Action {
@@ -21,4 +22,9 @@ export class LoadLoansError implements Action {
     public constructor(public payload: Error) {}
 }
 
-export type LoansActions = LoadLoans | LoadLoansSuccess | LoadLoansError;
+export class InvestToLoan implements Action {
+    public readonly type: LoansActionsTypes.InvestToLoan = LoansActionsTypes.InvestToLoan;
+    public constructor(public payload: {loanId: string; investmentAmount: number}) {}
+}
+
+export type LoansActions = LoadLoans | LoadLoansSuccess | LoadLoansError | InvestToLoan;

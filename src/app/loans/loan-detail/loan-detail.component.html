@@ -1,1 +1,26 @@
-<p>loan-detail works!</p>
+<strong>Invest In Loan</strong>
+<p>{{loan.title}}</p>
+<ul class="info">
+    <li>
+        <span>Amount:</span>
+        <span>&pound;{{ loan.amount }}</span>
+    </li>
+    <li>
+        <span>Amount available:</span>
+        <span>&pound;{{ loan.available }}</span>
+    </li>
+    <li *ngIf="!!getDateDiff()">
+        <span>Loan ends in:</span>
+        <span>{{ getDateDiff() }}</span>
+    </li>
+</ul>
+<p>Investment amount (&pound;)</p>
+<form class="form" [formGroup]="form" (submit)="onSubmit()">
+    <mat-form-field floatLabel="never">
+        <mat-label>Investment amount (&pound;)</mat-label>
+        <input formControlName="investmentAmount" matInput />
+        <mat-error *ngIf="form.controls['investmentAmount'].hasError('notANumber')">Only number values</mat-error>        
+        <mat-error *ngIf="form.controls['investmentAmount'].hasError('max')">Not bigger than &pound;{{loan.available}}</mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary" type="submit">Invest</button>
+</form>

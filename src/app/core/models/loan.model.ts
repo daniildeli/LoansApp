@@ -6,6 +6,7 @@ export interface ILoan {
     term_remaining: string;
     ltv: string;
     amount: string;
+    id: string;
 }
 
 export interface ILoansResponse {

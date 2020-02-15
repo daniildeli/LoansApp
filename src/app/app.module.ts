@@ -1,18 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './state';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { EffectsModule } from '@ngrx/effects';
-
 import { LoansModule } from './loans/loans.module';
-
 import { AppComponent } from './app.component';
 import { environment } from './../environments/environment';
 import { LoansEffects } from './state/loans.effects';
+import { reducers } from './state';
 
 @NgModule({
   declarations: [
@@ -30,6 +29,7 @@ import { LoansEffects } from './state/loans.effects';
     }),
     EffectsModule.forRoot([LoansEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
