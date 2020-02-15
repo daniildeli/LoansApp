@@ -8,6 +8,7 @@ import { LoanDetailComponent } from './loan-detail/loan-detail.component';
   declarations: [LoansListComponent, LoanItemComponent, LoanDetailComponent],
   imports: [
     CommonModule
-  ]
+  ],
+  exports: [LoansListComponent, LoanItemComponent, LoanDetailComponent]
 })
 export class LoansModule { }
