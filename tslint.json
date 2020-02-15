@@ -194,10 +194,10 @@
       "check-type-operator"
     ],
     "component-class-suffix": [true, "Component"],
-    "component-selector": [true, "element", "app", "kebab-case"],
+    "component-selector": [true, "element", ["app", "loan", "loans"], "kebab-case"],
     "contextual-lifecycle": true,
     "directive-class-suffix": [true, "Directive"],
-    "directive-selector": [true, "attribute", "app", "camelCase"],
+    "directive-selector": [true, "attribute", ["app", "loan", "loans"], "camelCase"],
     "import-destructuring-spacing": true,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,

@@ -1,0 +1,28 @@
+.item-holder {
+    background: #ffffff;
+    border: 1px solid grey;
+    padding: 20px;
+    .row {
+        display: flex;
+        justify-content: space-between;
+        strong {
+            display: block;
+            margin: 0 0 20px;
+        }
+        span {
+            color: green;
+        }
+    }
+    .info li {
+        margin: 0 0 10px;
+        span {
+            display: inline-block;
+            color: black;
+            vertical-align: top;
+            &:first-child {
+                font-weight: bold;
+                margin: 0 10px 0 0;
+            }
+        } 
+    }
+}

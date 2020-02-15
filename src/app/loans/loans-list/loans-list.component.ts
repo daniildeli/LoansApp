@@ -8,7 +8,7 @@ import { IState } from './../../state';
 import { LoadLoans } from './../../state/loans.actions';
 
 @Component({
-  selector: 'app-loans-list',
+  selector: 'loans-list',
   templateUrl: './loans-list.component.html',
   styleUrls: ['./loans-list.component.scss']
 })

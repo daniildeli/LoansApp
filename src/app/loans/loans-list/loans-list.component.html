@@ -1,6 +1,6 @@
 <h1>Current Loans</h1>
 <ul class="loans-list">
     <li *ngFor="let loan of loansList$ | async">
-        {{loan | json}}
+        <loan-item [loan]="loan"></loan-item>
     </li>
 </ul>
