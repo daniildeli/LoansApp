@@ -1,23 +1,25 @@
 <div class="item-holder">
-    <div class="row head">
-        <strong>{{loan.title}}</strong>
-        <span *ngIf="isInvested">Invested</span>
-    </div>
-    <div class="row">
-        <ul class="info">
-            <li>
-                <span>Tranche:</span>
-                <span>{{loan.tranche}}</span>
-            </li>
-            <li>
-                <span>Amount:</span>
-                <span>&pound;{{loan.amount}}</span>
-            </li>
-            <li>
-                <span>Available:</span>
-                <span>&pound;{{loan.available}}</span>
-            </li>
-        </ul>
-        <button mat-flat-button color="primary" (click)="openDetails()">Invest</button>
-    </div>
+  <div class="row head">
+    <strong>{{ loan.title }}</strong>
+    <span *ngIf="isInvested">Invested</span>
+  </div>
+  <div class="row">
+    <ul class="info">
+      <li>
+        <span>Tranche:</span>
+        <span>{{ loan.tranche }}</span>
+      </li>
+      <li>
+        <span>Amount:</span>
+        <span>&pound;{{ loan.amount }}</span>
+      </li>
+      <li>
+        <span>Available:</span>
+        <span>&pound;{{ loan.available }}</span>
+      </li>
+    </ul>
+    <button mat-flat-button color="primary" (click)="openDetails()">
+      Invest
+    </button>
+  </div>
 </div>

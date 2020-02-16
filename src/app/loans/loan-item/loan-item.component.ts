@@ -12,7 +12,7 @@ import { LoanDetailComponent } from '../loan-detail/loan-detail.component';
 export class LoanItemComponent {
   @Input() public readonly loan: ILoan;
   @Input() public readonly isInvested: boolean;
-  public constructor(public dialog: MatDialog) { }
+  public constructor(public dialog: MatDialog) {}
 
   public openDetails(): void {
     this.dialog.open(LoanDetailComponent, {
@@ -21,5 +21,4 @@ export class LoanItemComponent {
       panelClass: 'custom-dialog'
     });
   }
-
 }

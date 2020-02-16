@@ -12,19 +12,25 @@ import { IState } from '../state';
 import { selectInvestedLoansIds } from '../state/loans.selectors';
 import { LoadLoans, InvestToLoan } from '../state/loans.actions';
 
-export function numberValidator(control: AbstractControl): { [key: string]: boolean } | null {
-  return !!control.value && isNaN(+(`${control.value}`.trim().replace(',', '.'))) ? { notANumber: true } : null;
+export function numberValidator(
+  control: AbstractControl
+): { [key: string]: boolean } | null {
+  return !!control.value && isNaN(+`${control.value}`.trim().replace(',', '.'))
+    ? { notANumber: true }
+    : null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoansService {
-  private readonly investedLoansIds$: Observable<string[]> = this.store.pipe(select(selectInvestedLoansIds));
+  private readonly investedLoansIds$: Observable<string[]> = this.store.pipe(
+    select(selectInvestedLoansIds)
+  );
   public constructor(
     private snackBar: MatSnackBar,
     private store: Store<IState>
-  ) { }
+  ) {}
   public loadLoans(): void {
     this.store.dispatch(new LoadLoans());
   }
@@ -33,7 +39,7 @@ export class LoansService {
       duration: 2000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
-      panelClass: 'snackbar-holder',
+      panelClass: 'snackbar-holder'
     });
   }
   public getDatesDiff(start: Date, end: Date): string {
@@ -45,11 +51,17 @@ export class LoansService {
     const hoursDiff: number = endDate.diff(startDate, 'hour');
     const minuteDiff: number = endDate.diff(startDate, 'minute');
 
-    return `${!!yearDiff ? `${yearDiff} year(s)` : ''}
-      ${!!monthDiff ? `${monthDiff} month(s)` : ''}
-      ${!!dayDiff ? `${dayDiff} day(s)` : ''}
-      ${!!hoursDiff ? `${hoursDiff} hour(s)` : ''}
-      ${!!minuteDiff ? `${minuteDiff} minute(s)` : ''}`.trim();
+    return !!yearDiff
+      ? `${yearDiff} year(s)`
+      : !!monthDiff
+      ? `${monthDiff} month(s)`
+      : !!dayDiff
+      ? `${dayDiff} day(s)`
+      : !!hoursDiff
+      ? `${hoursDiff} hour(s)`
+      : !!minuteDiff
+      ? `${minuteDiff} minute(s)`
+      : '';
   }
   public isLoanInvested$(loanId: string): Observable<boolean> {
     return this.investedLoansIds$.pipe(
@@ -57,6 +69,6 @@ export class LoansService {
     );
   }
   public onInvest(loanId: string, investmentAmount: number): void {
-    this.store.dispatch(new InvestToLoan({loanId, investmentAmount }));
+    this.store.dispatch(new InvestToLoan({ loanId, investmentAmount }));
   }
 }

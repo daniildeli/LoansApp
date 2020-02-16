@@ -1,7 +1,13 @@
 <h1>Current Loans</h1>
 <ul class="loans-list">
-    <li *ngFor="let loan of loansList$ | async">
-        <loan-item [loan]="loan" [isInvested]="isInvested$(loan.id) | async"></loan-item>
-    </li>
+  <li *ngFor="let loan of loansList$ | async">
+    <loan-item
+      [loan]="loan"
+      [isInvested]="isInvested$(loan.id) | async"
+    ></loan-item>
+  </li>
 </ul>
-<p>Total amount available for investments: <strong>&pound;{{totalAvailableAmount$ | async}}</strong></p>
+<p>
+  Total amount available for investments:
+  <strong>&pound;{{ totalAvailableAmount$ | async }}</strong>
+</p>

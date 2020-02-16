@@ -1,6 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl
+} from '@angular/forms';
 
 import { takeUntil, filter, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -20,16 +25,10 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public readonly loan: ILoan,
     private dialogRef: MatDialogRef<LoanDetailComponent>,
     private loansService: LoansService
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
-    this.form = new FormGroup({
-      investmentAmount: new FormControl('', [
-        Validators.min(0),
-        Validators.max(+(this.loan.available.replace(',', '.'))),
-        numberValidator
-      ])
-    });
+    this.initForm();
     this.spyOnAmountField();
   }
 
@@ -38,8 +37,40 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  private initForm(): void {
+    const availableAmount: number = +this.loan.available.replace(',', '');
+    this.form = new FormGroup({
+      investmentAmount: new FormControl('', [
+        Validators.min(0.01),
+        Validators.max(availableAmount),
+        Validators.required,
+        numberValidator
+      ])
+    });
+    if (availableAmount <= 0) {
+      this.form.disable();
+    }
+  }
+
+  private spyOnAmountField(): void {
+    const amountControl: AbstractControl = this.form.controls.investmentAmount;
+    amountControl.valueChanges
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        filter(value => !!value && !!value.trim()),
+        map(value => value.trim()),
+        filter(value => value.includes(',') || value.startsWith('.'))
+      )
+      .subscribe(value => {
+        const newValue: string = value.replace(',', '.');
+        amountControl.setValue(
+          newValue.startsWith('.') ? `0${newValue}` : newValue
+        );
+      });
+  }
+
   public onSubmit(): void {
-    if (this.form.valid && !!this.form.controls.investmentAmount.value) {
+    if (this.form.valid) {
       this.loansService.onInvest(
         this.loan.id,
         +this.form.controls.investmentAmount.value.trim().replace(',', '.')
@@ -48,21 +79,13 @@ export class LoanDetailComponent implements OnInit, OnDestroy {
       this.loansService.showTooltip('Invested successfully!');
     }
   }
-  private spyOnAmountField(): void {
-    const amountControl: AbstractControl = this.form.controls.investmentAmount;
-    amountControl.valueChanges.pipe(
-      takeUntil(this.unsubscribe$),
-      filter(value => !!value && !!value.trim()),
-      map(value => value.trim())
-    ).subscribe(value => {
-      if (value.startsWith('.') || value.startsWith(',')) {
-        amountControl.setValue(`0${value}`);
-      }
-    });
-  }
+
   public getDateDiff(): string {
     const currentDate: Date = new Date();
 
-    return this.loansService.getDatesDiff(currentDate, new Date(currentDate.getTime() + +this.loan.term_remaining));
+    return this.loansService.getDatesDiff(
+      currentDate,
+      new Date(currentDate.getTime() + +this.loan.term_remaining)
+    );
   }
 }

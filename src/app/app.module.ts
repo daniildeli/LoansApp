@@ -14,9 +14,7 @@ import { LoansEffects } from './state/loans.effects';
 import { reducers } from './state';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -24,14 +22,14 @@ import { reducers } from './state';
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,
-        strictActionImmutability: true,
+        strictActionImmutability: true
       }
     }),
     EffectsModule.forRoot([LoansEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

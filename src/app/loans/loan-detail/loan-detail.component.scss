@@ -1,12 +1,25 @@
 .info {
-    margin: 0 0 25px;
+  margin: 0 0 25px;
 }
 .form {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .mat-form-field {
+    width: 50%;
+    text-align: right;
+  }
+}
+
+@media (max-width: 500px) {
+  .form {
+    display: block;
     .mat-form-field {
-        width: 50%;
-        text-align: right;
+      width: 100%;
+      margin: 0 0 10px;
     }
+    button {
+      width: 100%;
+    }
+  }
 }
